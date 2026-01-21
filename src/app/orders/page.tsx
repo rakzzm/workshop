@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button"
 import prisma from "@/lib/prisma"
+export const dynamic = 'force-dynamic'
 import { CreateOrderDialog } from "@/components/purchase-orders/create-order-dialog"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"

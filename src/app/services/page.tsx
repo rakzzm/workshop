@@ -1,4 +1,5 @@
 import { Input } from "@/components/ui/input"
+export const dynamic = 'force-dynamic'
 import { Button } from "@/components/ui/button"
 import { Search } from "lucide-react"
 import prisma from "@/lib/prisma"

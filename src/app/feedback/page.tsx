@@ -1,4 +1,5 @@
 "use client"
+export const dynamic = 'force-dynamic'
 
 import { useState, useEffect } from "react"
 import { getTickets, getTicketDetails, addMessage, updateTicketStatus } from "@/app/actions/ticket-actions"

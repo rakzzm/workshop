@@ -1,4 +1,5 @@
 import { getServiceHistory } from "@/app/actions/service-history-action"
+export const dynamic = 'force-dynamic'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Calendar, Car, Wrench } from "lucide-react"

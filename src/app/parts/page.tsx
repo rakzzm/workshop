@@ -2,6 +2,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Search } from "lucide-react"
 import prisma from "@/lib/prisma"
+export const dynamic = 'force-dynamic'
 import { PartCard } from "@/components/parts/part-card"
 import { PartDialog } from "@/components/inventory/part-dialog"
 
