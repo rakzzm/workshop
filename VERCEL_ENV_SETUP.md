@@ -27,7 +27,7 @@ Add these **3 variables**:
 
 ### Variable 3: AUTH_URL
 - **Key**: `AUTH_URL`
-- **Value** (Production): `https://your-app-name.vercel.app`
+- **Value** (Production): `https://workshop.meghcomm.store`
 - **Environments**: ✅ Production
 
 For Preview environment (optional):
