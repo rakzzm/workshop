@@ -1,7 +1,7 @@
 "use client"
 
-import { useFormState, useFormStatus } from 'react-dom'
-import { authenticate } from '@/app/actions/auth-actions'
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -9,21 +9,45 @@ import { Label } from "@/components/ui/label"
 import { AlertCircle, Loader2 } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 
-function LoginButton() {
-  const { pending } = useFormStatus()
-  return (
-    <Button className="w-full" type="submit" disabled={pending}>
-      {pending ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Logging in...</> : "Sign In"}
-    </Button>
-  )
-}
-
 export default function LoginPage() {
-  const [errorMessage, dispatch] = useFormState(authenticate, undefined)
+  const router = useRouter()
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setError('')
+    setLoading(true)
+
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      })
+
+      const data = await res.json()
+
+      if (!res.ok) {
+        setError(data.error || 'Login failed')
+        setLoading(false)
+        return
+      }
+
+      //  Login successful
+      router.push('/')
+      router.refresh()
+    } catch (err) {
+      setError('Something went wrong')
+      setLoading(false)
+    }
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[url('/grid.svg')] bg-cover relative">
-       {/* Background Blur Overlay handled via CSS or simple overlay div */}
+       {/* Background Blur Overlay */}
        <div className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm z-0" />
        
        <Card className="w-[380px] z-10 bg-white/90 backdrop-blur-xl border-slate-200 shadow-2xl">
@@ -37,29 +61,46 @@ export default function LoginPage() {
           <CardDescription>Enter your credentials to access the workshop.</CardDescription>
         </CardHeader>
         <CardContent>
-          <form action={dispatch} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" name="email" placeholder="admin@meghcomm.store" required />
+              <Input 
+                id="email" 
+                type="email" 
+                name="email" 
+                placeholder="admin@meghcomm.store"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required 
+              />
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
-              <Input id="password" type="password" name="password" required />
+              <Input 
+                id="password" 
+                type="password" 
+                name="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required 
+              />
             </div>
             
-            {errorMessage && (
+            {error && (
               <Alert variant="destructive">
                 <AlertCircle className="h-4 w-4" />
                 <AlertTitle>Error</AlertTitle>
-                <AlertDescription>{errorMessage}</AlertDescription>
+                <AlertDescription>{error}</AlertDescription>
               </Alert>
             )}
 
-            <LoginButton />
+            <Button className="w-full" type="submit" disabled={loading}>
+              {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Logging in...</> : "Sign In"}
+            </Button>
           </form>
         </CardContent>
         <CardFooter className="flex justify-center text-sm text-muted-foreground bg-slate-50/50 p-4 rounded-b-xl">
-          Don't have an account? <a href="/signup" className="text-blue-600 hover:underline ml-1">Sign up</a>
+          Demo: admin@meghcomm.store / admin123456
         </CardFooter>
       </Card>
     </div>

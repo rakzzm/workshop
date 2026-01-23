@@ -1,34 +1,49 @@
-import NextAuth from "next-auth"
-import { authConfig } from "@/auth.config"
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
 
-const { auth } = NextAuth(authConfig)
-import { NextResponse } from "next/server"
+// Paths that require authentication
+const protectedPaths = [
+  '/',
+  '/customers',
+  '/vendors',
+  '/mechanics',
+  '/inventory',
+  '/parts',
+  '/orders',
+  '/jobs',
+  '/services',
+  '/service-history',
+  '/feedback',
+  '/support',
+  '/settings',
+  '/reports'
+]
 
-export default auth((req) => {
-  const isLoggedIn = !!req.auth
-  const { pathname } = req.nextUrl
-
-  // Define public routes
-  const publicRoutes = ['/login', '/signup']
-  const isPublicRoute = publicRoutes.includes(pathname)
-
-  // Allow next/static, images, api, etc (Already handled by matcher, but safe to ignore if passed)
-  if (pathname.startsWith('/_next') || pathname.startsWith('/api') || pathname.includes('.')) {
+export function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl
+  
+  // Allow login page and API routes
+  if (pathname === '/login' || pathname.startsWith('/api/')) {
     return NextResponse.next()
   }
 
-  // Redirect logic
-  if (isLoggedIn && isPublicRoute) {
-    return NextResponse.redirect(new URL('/', req.nextUrl))
-  }
-
-  if (!isLoggedIn && !isPublicRoute) {
-    return NextResponse.redirect(new URL('/login', req.nextUrl))
+  // Check if path requires authentication
+  const isProtected = protectedPaths.some(path => pathname === path || pathname.startsWith(path + '/'))
+  
+  if (isProtected) {
+    // Check for session cookie
+    const session = request.cookies.get('session')
+    
+    if (!session) {
+      // Redirect to login if no session
+      const loginUrl = new URL('/login', request.url)
+      return NextResponse.redirect(loginUrl)
+    }
   }
 
   return NextResponse.next()
-})
+}
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
+  matcher: ['/((?!_next/static|_next/image|favicon.ico|grid.svg|.*\\.png$).*)']
 }

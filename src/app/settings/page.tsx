@@ -1,6 +1,6 @@
 "use client"
 
-import { useSession } from "next-auth/react"
+import { useSession } from "@/hooks/use-session"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 export const dynamic = 'force-dynamic'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -20,9 +20,9 @@ import { SecuritySettings } from "@/components/settings/security-settings"
 import { BackupSettings } from "@/components/settings/backup-settings"
 
 export default function SettingsPage() {
-    const { data: session } = useSession()
+    const { user } = useSession()
 
-    if (!session?.user) return null
+    if (!user) return null
 
     return (
         <div className="space-y-6">
@@ -131,16 +131,16 @@ export default function SettingsPage() {
                             <CardContent className="space-y-4">
                                 <div className="grid gap-2">
                                     <Label>Full Name</Label>
-                                    <Input defaultValue={session.user.name || ''} readOnly />
+                                    <Input defaultValue={user.name || ''} readOnly />
                                 </div>
                                 <div className="grid gap-2">
                                     <Label>Email Address</Label>
-                                    <Input defaultValue={session.user.email || ''} readOnly disabled />
+                                    <Input defaultValue={user.email || ''} readOnly disabled />
                                 </div>
                                 <div className="flex items-center gap-3 p-4 border rounded-lg bg-slate-50">
                                     <Shield className="h-5 w-5 text-blue-500" />
                                     <div className="flex-1">
-                                        <div className="text-sm font-medium">Logged in as {session.user.role}</div>
+                                        <div className="text-sm font-medium">Logged in as {user.role}</div>
                                         <div className="text-xs text-muted-foreground">Admin permissions enabled</div>
                                     </div>
                                     <Badge variant="outline">Verified</Badge>

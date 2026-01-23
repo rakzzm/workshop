@@ -4,8 +4,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { LayoutGrid, Clock, ClipboardList, Settings2, Wrench, Users2, Box, ScanBarcode, Store, ChartBar, MessageSquare, Car, Shield, ShoppingCart } from "lucide-react"
-import { useSession } from "next-auth/react"
-import { signOutAction } from "@/app/actions/signout-action"
+import { useSession } from "@/hooks/use-session"
 
 const navigation = [
   { name: "Dashboard", href: "/", icon: LayoutGrid, roles: ['ADMIN', 'USER'] },
@@ -26,10 +25,8 @@ const navigation = [
 
 export function Sidebar() {
   const pathname = usePathname()
-  const { data: session } = useSession()
-  
-  // Default to GUEST if loading or no session meant to be handled by middleware
-  const userRole = session?.user?.role || 'GUEST'
+  const { user, logout } = useSession()
+  const userRole = user?.role || 'USER'
 
   // Filter items based on role
   const filteredNav = navigation.filter(item => {
@@ -97,25 +94,26 @@ export function Sidebar() {
         </nav>
         
         {/* User Profile Mini Section */}
-        {session?.user ? (
+        {user ? (
             <div className="border-t p-2">
                 <div className="flex items-center rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted group/profile">
                     <div className="h-8 w-8 rounded-full bg-slate-200 shrink-0 flex items-center justify-center text-xs font-bold text-slate-700 uppercase">
-                        {session.user.name?.charAt(0) || 'U'}
+                        {user.name?.charAt(0) || 'U'}
                     </div>
                     <div className="ml-3 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap flex-1 overflow-hidden">
-                        <div className="text-foreground font-semibold truncate">{session.user.name}</div>
-                        <div className="text-xs truncate uppercase">{session.user.role}</div>
+                        <div className="text-foreground font-semibold truncate">{user.name}</div>
+                        <div className="text-xs truncate uppercase">{user.role}</div>
                     </div>
                 </div>
                 
                 {/* Logout Button (Only visible on hover or simplified) */}
                  <div className="mt-1 opacity-0 group-hover:opacity-100 transition-opacity px-3 pb-2">
-                    <form action={signOutAction}>
-                        <button className="text-xs text-red-500 hover:text-red-700 w-full text-left flex items-center gap-2">
-                            <Shield className="h-3 w-3" /> Sign Out
-                        </button>
-                    </form>
+                    <button 
+                      onClick={logout}
+                      className="text-xs text-red-500 hover:text-red-700 w-full text-left flex items-center gap-2"
+                    >
+                        <Shield className="h-3 w-3" /> Sign Out
+                    </button>
                 </div>
             </div>
         ) : (
