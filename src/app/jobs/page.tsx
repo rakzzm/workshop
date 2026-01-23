@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma"
+import { MOCK_JOBS } from "@/lib/mock-data"
 export const dynamic = 'force-dynamic'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -21,7 +22,7 @@ export default async function JobsPage() {
   } catch (error) {
     console.log('Database not available, showing empty jobs list')
     // Return empty array if database doesn't exist (Vercel)
-    jobs = []
+    jobs = MOCK_JOBS as any[]
   }
 
   const stats = {
