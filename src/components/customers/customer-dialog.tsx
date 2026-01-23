@@ -69,7 +69,7 @@ export function CustomerDialog({ customer, trigger }: CustomerDialogProps) {
     setLoading(true)
 
     try {
-        let res
+        let res: any
         if (customer) {
             res = await updateCustomer(customer.id, formData)
         } else {
