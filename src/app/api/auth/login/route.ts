@@ -3,6 +3,24 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+// Hardcoded credentials for Vercel (no database needed)
+const HARDCODED_USERS = [
+  {
+    id: 'admin-001',
+    email: 'admin@meghcomm.store',
+    name: 'Workshop Admin',
+    password: 'admin123456',
+    role: 'ADMIN'
+  },
+  {
+    id: 'user-001',
+    email: 'user@meghcomm.store',
+    name: 'John Doe',
+    password: 'user123456',
+    role: 'USER'
+  }
+];
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -15,11 +33,21 @@ export async function POST(request: Request) {
       );
     }
 
-    const user = await prisma.user.findUnique({
-      where: { email }
-    });
+    let user = null;
 
-    // Plain text password comparison (matching seeded passwords)
+    // Try database first
+    try {
+      user = await prisma.user.findUnique({
+        where: { email }
+      });
+    } catch (dbError) {
+      console.log('Database not available, using hardcoded credentials');
+      
+      // Fallback to hardcoded users (for Vercel)
+      user = HARDCODED_USERS.find(u => u.email === email);
+    }
+
+    // Validate password (plain text comparison)
     if (!user || user.password !== password) {
       return NextResponse.json(
         { error: 'Invalid credentials' },
