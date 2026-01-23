@@ -13,9 +13,9 @@ const HARDCODED_USERS = [
     role: 'ADMIN'
   },
   {
-    id: 'user-001',
-    email: 'user@meghcomm.store',
-    name: 'John Doe',
+    id: '1', // Matches MOCK_CUSTOMERS[0].id
+    email: 'rajesh@example.com', // Matches MOCK_CUSTOMERS[0].email
+    name: 'Rajesh Kumar',
     password: 'user123456',
     role: 'USER'
   }

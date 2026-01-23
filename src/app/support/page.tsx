@@ -11,8 +11,10 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Label } from "@/components/ui/label"
 import { AlertCircle, CheckCircle2, LifeBuoy } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { useAuth } from "@/contexts/AuthContext"
 
 export default function SupportPage() {
+    const { user } = useAuth()
     const [loading, setLoading] = useState(false)
     const [success, setSuccess] = useState(false)
     
@@ -26,8 +28,7 @@ export default function SupportPage() {
             description: formData.get('description'),
             category: formData.get('category'),
             priority: formData.get('priority') || 'MEDIUM',
-            // In a real app, these would come from auth session
-            customerId: null, 
+            customerId: formData.get('customerId'), 
             vehicleId: null 
         }
 
@@ -81,6 +82,8 @@ export default function SupportPage() {
                     </CardHeader>
                     <CardContent>
                         <form onSubmit={handleSubmit} className="space-y-4">
+                            <input type="hidden" name="customerId" value={user?.id || ''} />
+
                             <div className="space-y-2">
                                 <Label htmlFor="subject">Subject</Label>
                                 <Input id="subject" name="subject" required placeholder="e.g. Engine noise when braking" />
