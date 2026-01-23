@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client'
-import { MOCK_CUSTOMERS, MOCK_MECHANICS, MOCK_VENDORS, MOCK_PARTS, MOCK_JOBS, MOCK_PURCHASE_ORDERS } from './mock-data'
+import { MOCK_CUSTOMERS, MOCK_MECHANICS, MOCK_VENDORS, MOCK_PARTS, MOCK_JOBS, MOCK_PURCHASE_ORDERS, MOCK_VEHICLES, MOCK_SERVICE_RECORDS } from './mock-data'
 
 // Create Prisma client with automatic error handling AND mock data fallback
 const globalForPrisma = global as unknown as { prisma: PrismaClient }
@@ -11,6 +11,8 @@ const MOCK_DATA_MAP: Record<string, any[]> = {
   part: MOCK_PARTS,
   jobBoard: MOCK_JOBS,
   purchaseOrder: MOCK_PURCHASE_ORDERS,
+  vehicle: MOCK_VEHICLES,
+  serviceRecord: MOCK_SERVICE_RECORDS,
 }
 
 const createSafePrisma = () => {
