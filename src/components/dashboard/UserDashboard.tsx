@@ -1,9 +1,37 @@
+"use client"
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Car, Clock, Shield, Search } from "lucide-react"
 import Link from "next/link"
+import { useState, useEffect } from "react"
+import { getAppointments } from "@/app/actions/appointment-actions"
+import { getVehicles } from "@/app/actions/customer-actions"
+import { NewAppointmentDialog } from "@/components/appointments/NewAppointmentDialog"
 
 export function UserDashboard({ user }: { user: any }) {
+    const [appointments, setAppointments] = useState<any[]>([])
+    const [vehicles, setVehicles] = useState<any[]>([])
+    const [loading, setLoading] = useState(true)
+
+    async function loadData() {
+        setLoading(true)
+        const apps = await getAppointments('USER', user.id)
+        if (apps.success) setAppointments(apps.data || [])
+        
+        const v = await getVehicles()
+        if (v.success) setVehicles(v.data || [])
+        
+        setLoading(false)
+    }
+
+    useEffect(() => {
+        loadData()
+    }, [])
+    
+    // Count upcoming (Pending/Confirmed)
+    const upcomingCount = appointments.filter(a => ['PENDING', 'CONFIRMED'].includes(a.status)).length
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -51,11 +79,17 @@ export function UserDashboard({ user }: { user: any }) {
             <Clock className="h-4 w-4 text-purple-500" />
            </CardHeader>
            <CardContent>
-            <div className="text-2xl font-bold">Appointments</div>
-            <p className="text-xs text-muted-foreground">No upcoming bookings</p>
-            <Button variant="outline" className="mt-4 w-full" disabled>
-                Book Service (Coming Soon)
-            </Button>
+            <div className="text-2xl font-bold">{upcomingCount} Appointments</div>
+            <p className="text-xs text-muted-foreground">
+                {upcomingCount > 0 ? "You have scheduled services." : "No upcoming bookings."}
+            </p>
+            <div className="mt-4 w-full">
+                 <NewAppointmentDialog 
+                    vehicles={vehicles} 
+                    onSuccess={loadData}
+                    trigger={<Button className="w-full" variant="outline">Book Service</Button>}
+                 />
+            </div>
            </CardContent>
         </Card>
       </div>
