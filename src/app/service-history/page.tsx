@@ -19,9 +19,9 @@ export default async function ServiceHistoryPage() {
                                 <div>
                                     <CardTitle className="flex items-center gap-2">
                                         <Car className="h-5 w-5 text-blue-500" />
-                                        {record.vehicle.regNumber}
+                                        {record.vehicle?.regNumber || 'Unknown Vehicle'}
                                     </CardTitle>
-                                    <CardDescription>{record.vehicle.model}</CardDescription>
+                                    <CardDescription>{record.vehicle?.model || 'N/A'}</CardDescription>
                                 </div>
                                 <Badge variant={record.status === 'COMPLETED' ? 'default' : 'secondary'}>
                                     {record.status}

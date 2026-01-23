@@ -181,18 +181,12 @@ export default async function JobsPage() {
               <div className="flex gap-2 pt-2 border-t">
                 {job.status === 'PENDING' && (
                   <>
-                    <form action={async () => {
-                      "use server"
-                      await approveJob(job.id, { approvedBy: "Manager" })
-                    }} className="flex-1">
+                    <form action={approveJob.bind(null, job.id, { approvedBy: "Manager" })} className="flex-1">
                       <Button size="sm" className="w-full bg-green-600 hover:bg-green-700" type="submit">
                         <CheckCircle2 className="h-3 w-3 mr-1" /> Approve
                       </Button>
                     </form>
-                    <form action={async () => {
-                      "use server"
-                      await rejectJob(job.id, { rejectedBy: "Manager", rejectionReason: "Not approved" })
-                    }} className="flex-1">
+                    <form action={rejectJob.bind(null, job.id, { rejectedBy: "Manager", rejectionReason: "Not approved" })} className="flex-1">
                       <Button size="sm" variant="destructive" className="w-full" type="submit">
                         <XCircle className="h-3 w-3 mr-1" /> Reject
                       </Button>
@@ -200,20 +194,14 @@ export default async function JobsPage() {
                   </>
                 )}
                 {job.status === 'APPROVED' && (
-                  <form action={async () => {
-                    "use server"
-                    await startJob(job.id)
-                  }} className="flex-1">
+                  <form action={startJob.bind(null, job.id)} className="flex-1">
                     <Button size="sm" className="w-full bg-purple-600 hover:bg-purple-700" type="submit">
                       <Play className="h-3 w-3 mr-1" /> Start Work
                     </Button>
                   </form>
                 )}
                 {job.status === 'IN_PROGRESS' && (
-                  <form action={async () => {
-                    "use server"
-                    await completeJob(job.id, { finalCost: job.estimatedCost || 0 })
-                  }} className="flex-1">
+                  <form action={completeJob.bind(null, job.id, { finalCost: job.estimatedCost || 0 })} className="flex-1">
                     <Button size="sm" className="w-full bg-green-600 hover:bg-green-700" type="submit">
                       <CheckCircle2 className="h-3 w-3 mr-1" /> Complete
                     </Button>

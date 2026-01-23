@@ -5,43 +5,58 @@ import { revalidatePath } from "next/cache"
 
 export async function createCustomer(data: any) {
   try {
-    const customer = await prisma.customer.create({
-      data: {
-        customerId: data.customerId,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        phone: data.phone,
-        email: data.email || null,
-        address: data.address || null,
-        gstin: data.gstin || null,
-      },
+    const result = await prisma.$transaction(async (tx) => {
+      // 1. Create the customer
+      const customer = await tx.customer.create({
+        data: {
+          customerId: data.customerId,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          phone: data.phone,
+          email: data.email || null,
+          address: data.address || null,
+          gstin: data.gstin || null,
+        },
+      })
+
+      // 2. Create vehicles if provided
+      if (data.vehicles && data.vehicles.length > 0) {
+        for (const vehicle of data.vehicles) {
+          // Check for existing vehicle with same reg number to avoid unique constraint error
+          const existingVehicle = await tx.vehicle.findUnique({
+            where: { regNumber: vehicle.regNumber }
+          })
+
+          if (existingVehicle) {
+            throw new Error(`Vehicle with registration ${vehicle.regNumber} already exists.`)
+          }
+
+          await tx.vehicle.create({
+            data: {
+              regNumber: vehicle.regNumber,
+              model: vehicle.model,
+              type: vehicle.type,
+              ownerName: `${data.firstName} ${data.lastName}`,
+              chassisNumber: vehicle.chassisNumber || null,
+              engineNumber: vehicle.engineNumber || null,
+              ownerPhone: data.phone,
+              ownerAddress: data.address || null,
+              ownerGstin: data.gstin || null,
+              customerId: customer.id,
+            },
+          })
+        }
+      }
+
+      return customer
     })
     
-    // Create vehicles if provided
-    if (data.vehicles && data.vehicles.length > 0) {
-      for (const vehicle of data.vehicles) {
-        await prisma.vehicle.create({
-          data: {
-            regNumber: vehicle.regNumber,
-            model: vehicle.model,
-            type: vehicle.type,
-            ownerName: `${data.firstName} ${data.lastName}`,
-            chassisNumber: vehicle.chassisNumber || null,
-            engineNumber: vehicle.engineNumber || null,
-            ownerPhone: data.phone,
-            ownerAddress: data.address || null,
-            ownerGstin: data.gstin || null,
-            customerId: customer.id,
-          },
-        })
-      }
-    }
-    
     revalidatePath("/customers")
-    return { success: true, customer }
-  } catch (error) {
-    console.error(error)
-    return { success: false, error: "Failed to create customer" }
+    return { success: true, customer: result }
+  } catch (error: any) {
+    console.error("Create Customer Error:", error)
+    // Return the specific error message if it's one we threw
+    return { success: false, error: error.message || "Failed to create customer" }
   }
 }
 
