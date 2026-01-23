@@ -34,7 +34,7 @@ export async function createPart(data: any) {
     revalidatePath("/parts")
     return { success: true }
   } catch (error) {
-    console.error("Create Part Database Error (falling back):", error)
+    console.warn("Database disconnected (Demo Mode): Using mock parts.", error)
     // Simulate success
     return { success: true }
   }
@@ -58,7 +58,7 @@ export async function updatePart(id: number, data: any) {
         revalidatePath("/parts")
         return { success: true }
     } catch (error) {
-        console.error("Update Part Database Error (falling back):", error)
+        console.warn("Database disconnected (Demo Mode): Using mock parts.", error)
         return { success: true }
     }
 }
@@ -71,7 +71,7 @@ export async function deletePart(id: number) {
         revalidatePath("/inventory")
         return { success: true }
     } catch (error) {
-        console.error("Delete Part Database Error (falling back):", error)
+        console.warn("Database disconnected (Demo Mode): Using mock parts.", error)
         return { success: true }
     }
 }

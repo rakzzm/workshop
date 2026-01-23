@@ -18,7 +18,7 @@ export async function searchParts(query: string) {
     })
     return parts
   } catch (error) {
-    console.error("Search Parts Error:", error)
+    console.warn("Database disconnected (Demo Mode): Part search failed, returning empty.", error)
     return []
   }
 }

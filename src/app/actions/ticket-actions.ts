@@ -42,7 +42,7 @@ export async function createTicket(data: any) {
             }
         })
     } catch (error) {
-        console.error("Database error in createTicket, falling back:", error)
+        console.warn("Database disconnected (Demo Mode): Using mock tickets.", error)
         // In fallback mode, we can't easily persist new data without a DB
         // But we simulate success
     }
@@ -66,7 +66,7 @@ export async function getTickets() {
         }
         return tickets
     } catch (error) {
-        console.error("Database error in getTickets, using mock data:", error)
+        console.warn("Database disconnected (Demo Mode): Using mock tickets.", error)
         return MOCK_TICKETS as any
     }
 }
@@ -91,7 +91,7 @@ export async function getTicketDetails(id: number) {
         }
         return ticket
     } catch (error) {
-        console.error("Database error in getTicketDetails, using mock data:", error)
+        console.warn("Database disconnected (Demo Mode): Using mock tickets.", error)
         const mock = MOCK_TICKETS.find(t => t.id === id)
         if (mock) return mock as any
         return null
@@ -108,7 +108,7 @@ export async function addMessage(ticketId: number, content: string, sender: stri
             }
         })
     } catch (error) {
-         console.error("Database error in addMessage, falling back:", error)
+         console.warn("Database disconnected (Demo Mode): Using mock tickets.", error)
          // Simulate success
     }
     revalidatePath('/feedback')
@@ -133,7 +133,7 @@ export async function updateTicketStatus(id: number, status: string) {
             }
         })
     } catch (error) {
-        console.error("Database error in updateTicketStatus, falling back:", error)
+        console.warn("Database disconnected (Demo Mode): Using mock tickets.", error)
         // Simulate success
     }
 

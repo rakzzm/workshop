@@ -19,7 +19,7 @@ export default async function VendorsPage() {
       }
     })
   } catch (error) {
-    console.error('Database error, using mock data:', error)
+    console.warn("Database disconnected (Demo Mode): Using mock vendors.", error)
     vendors = MOCK_VENDORS as any[]
   }
 

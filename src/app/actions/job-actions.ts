@@ -29,7 +29,7 @@ export async function getJobs() {
     
     return jobs
   } catch (error) {
-    console.error("Database error in getJobs, falling back:", error)
+    console.warn("Database disconnected (Demo Mode): Using mock jobs.", error)
     return MOCK_JOBS as any
   }
 }
@@ -52,7 +52,7 @@ export async function createJob(data: any) {
     revalidatePath("/jobs")
     return { success: true, job }
   } catch (error) {
-    console.error("Database error in createJob, falling back:", error)
+    console.warn("Database disconnected (Demo Mode): Using mock jobs.", error)
     return { success: true, job: { ...data, id: Math.floor(Math.random() * 1000) } }
   }
 }
@@ -77,7 +77,7 @@ export async function approveJob(id: number | string, data: any) {
     revalidatePath("/jobs")
     return { success: true, job }
   } catch (error) {
-    console.error("Database error in approveJob, falling back:", error)
+    console.warn("Database disconnected (Demo Mode): Using mock jobs.", error)
     return { success: true, job: { id, status: "APPROVED", ...data } }
   }
 }
@@ -100,7 +100,7 @@ export async function rejectJob(id: number | string, data: any) {
     revalidatePath("/jobs")
     return { success: true, job }
   } catch (error) {
-    console.error("Database error in rejectJob, falling back:", error)
+    console.warn("Database disconnected (Demo Mode): Using mock jobs.", error)
     return { success: true, job: { id, status: "REJECTED", ...data } }
   }
 }
@@ -121,7 +121,7 @@ export async function startJob(id: number | string) {
     revalidatePath("/jobs")
     return { success: true, job }
   } catch (error) {
-    console.error("Database error in startJob, falling back:", error)
+    console.warn("Database disconnected (Demo Mode): Using mock jobs.", error)
     return { success: true, job: { id, status: "IN_PROGRESS" } }
   }
 }
@@ -169,7 +169,7 @@ export async function completeJob(id: number | string, data: any) {
     revalidatePath("/services") // Update service history
     return { success: true, job: result }
   } catch (error) {
-    console.error("Database error in completeJob, falling back:", error)
+    console.warn("Database disconnected (Demo Mode): Using mock jobs.", error)
     return { success: true, job: { id, status: "COMPLETED", ...data } }
   }
 }
@@ -186,7 +186,7 @@ export async function deleteJob(id: number | string) {
     revalidatePath("/jobs")
     return { success: true }
   } catch (error) {
-    console.error("Database error in deleteJob, falling back:", error)
+    console.warn("Database disconnected (Demo Mode): Using mock jobs.", error)
     return { success: true }
   }
 }

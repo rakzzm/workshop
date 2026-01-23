@@ -30,7 +30,7 @@ export async function createVendor(data: any) {
     revalidatePath("/vendors")
     return { success: true, vendor }
   } catch (error) {
-    console.error("Database error in createVendor, falling back:", error)
+    console.warn("Database disconnected (Demo Mode): Using mock vendors.", error)
     // Simulate success for demo
     return { success: true, vendor: { ...data, id: Math.floor(Math.random() * 1000) } }
   }
@@ -62,7 +62,7 @@ export async function updateVendor(id: number, data: any) {
     revalidatePath("/vendors")
     return { success: true, vendor }
   } catch (error) {
-    console.error("Database error in updateVendor, falling back:", error)
+    console.warn("Database disconnected (Demo Mode): Using mock vendors.", error)
     return { success: true, vendor: { ...data, id } }
   }
 }
@@ -84,7 +84,7 @@ export async function deleteVendor(id: number) {
     revalidatePath("/vendors")
     return { success: true }
   } catch (error) {
-    console.error("Database error in deleteVendor, falling back:", error)
+    console.warn("Database disconnected (Demo Mode): Using mock vendors.", error)
     // Simulate success
     return { success: true }
   }

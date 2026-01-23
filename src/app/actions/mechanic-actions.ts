@@ -27,7 +27,7 @@ export async function createMechanic(data: any) {
     revalidatePath("/mechanics")
     return { success: true, mechanic }
   } catch (error) {
-    console.error("Database error in createMechanic, falling back:", error)
+    console.warn("Database disconnected (Demo Mode): Using mock mechanics.", error)
     // Simulate success
     return { success: true, mechanic: { ...data, id: Math.floor(Math.random() * 1000) } }
   }
@@ -56,7 +56,7 @@ export async function updateMechanic(id: number, data: any) {
     revalidatePath("/mechanics")
     return { success: true, mechanic }
   } catch (error) {
-    console.error("Database error in updateMechanic, falling back:", error)
+    console.warn("Database disconnected (Demo Mode): Using mock mechanics.", error)
     return { success: true, mechanic: { ...data, id } }
   }
 }
@@ -69,7 +69,7 @@ export async function deleteMechanic(id: number) {
     revalidatePath("/mechanics")
     return { success: true }
   } catch (error) {
-    console.error("Database error in deleteMechanic, falling back:", error)
+    console.warn("Database disconnected (Demo Mode): Using mock mechanics.", error)
     return { success: true }
   }
 }

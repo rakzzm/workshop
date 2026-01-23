@@ -55,7 +55,7 @@ export async function createCustomer(data: any) {
     revalidatePath("/customers")
     return { success: true, customer: result }
   } catch (error: any) {
-    console.error("Create Customer Database Error (falling back):", error)
+    console.warn("Database disconnected (Demo Mode): Using mock customers.", error)
     // Simulate success
     return { success: true, customer: { ...data, id: Math.floor(Math.random() * 1000) } }
   }
@@ -77,7 +77,7 @@ export async function updateCustomer(id: number, data: any) {
     revalidatePath("/customers")
     return { success: true, customer }
   } catch (error) {
-    console.error("Update Customer Database Error (falling back):", error)
+    console.warn("Database disconnected (Demo Mode): Using mock customers.", error)
     return { success: true, customer: { ...data, id } }
   }
 }
@@ -99,7 +99,7 @@ export async function deleteCustomer(id: number) {
     revalidatePath("/customers")
     return { success: true }
   } catch (error) {
-    console.error("Delete Customer Database Error (falling back):", error)
+    console.warn("Database disconnected (Demo Mode): Using mock customers.", error)
     // Simulate success
     return { success: true }
   }
@@ -123,6 +123,8 @@ export async function getCustomers() {
     }
     
     return customers
-    return enrichedCustomers as any
+  } catch (error) {
+    console.warn("Database disconnected (Demo Mode): Using mock customers.", error)
+    return MOCK_CUSTOMERS as any
   }
 }

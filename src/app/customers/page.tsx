@@ -23,7 +23,7 @@ export default async function CustomersPage() {
       }
     })
   } catch (error) {
-    console.error('Database error, using mock data:', error)
+    console.warn("Database disconnected (Demo Mode): Using mock customers.", error)
     customers = MOCK_CUSTOMERS as any[]
   }
 

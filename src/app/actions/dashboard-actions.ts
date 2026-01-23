@@ -186,7 +186,7 @@ export async function getDashboardStats() {
       }
     }
   } catch (error) {
-    console.warn("Dashboard stats error (using mock data):", error)
+    console.warn("Database disconnected (Demo Mode): Using mock dashboard stats.", error)
     
     // Fallback using MOCK data
     const { MOCK_CUSTOMERS, MOCK_VEHICLES, MOCK_MECHANICS, MOCK_PARTS, MOCK_VENDORS, MOCK_JOBS, MOCK_SERVICE_RECORDS, MOCK_PURCHASE_ORDERS } = require("@/lib/mock-data")
