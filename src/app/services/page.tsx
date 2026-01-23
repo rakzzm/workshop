@@ -91,7 +91,7 @@ if (query) {
               <ServiceForm mechanics={mechanics} vehicles={vehicles} parts={parts} vendors={vendors} />
           </div>
 
-          <ServiceList services={services} />
+          <ServiceList services={services} vehicles={vehicles} parts={parts} />
       </div>
   )
 }
