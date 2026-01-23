@@ -39,7 +39,7 @@ if (query) {
         }
     })
   } catch (error) {
-    console.log('Database unavailable, using mock services')
+    console.warn("Database disconnected (Demo Mode): Using mock services.", error)
     services = MOCK_SERVICE_RECORDS
   }
 
@@ -49,7 +49,7 @@ if (query) {
         orderBy: { name: 'asc' }
     })
   } catch (error) {
-    console.log('Database unavailable, using mock mechanics')
+    console.warn("Database disconnected (Demo Mode): Using mock mechanics.", error)
     mechanics = MOCK_MECHANICS
   }
 
@@ -58,7 +58,7 @@ if (query) {
         orderBy: { updatedAt: 'desc' }
     })
   } catch (error) {
-    console.log('Database unavailable, using mock vehicles')
+    console.warn("Database disconnected (Demo Mode): Using mock vehicles.", error)
     vehicles = MOCK_VEHICLES
   }
 
@@ -67,7 +67,7 @@ if (query) {
         orderBy: { name: 'asc' }
     })
   } catch (error) {
-    console.log('Database unavailable, using mock parts')
+    console.warn("Database disconnected (Demo Mode): Using mock parts.", error)
     parts = MOCK_PARTS
   }
 
@@ -77,7 +77,7 @@ if (query) {
         orderBy: { companyName: 'asc' }
     })
   } catch (error) {
-    console.log('Database unavailable, using mock vendors')
+    console.warn("Database disconnected (Demo Mode): Using mock vendors.", error)
     vendors = MOCK_VENDORS
   }
 

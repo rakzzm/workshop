@@ -30,7 +30,7 @@ export async function getServiceHistory() {
 
         return serviceRecords
     } catch (error) {
-        console.error("Failed to fetch service history, utilizing mock data:", error)
+        console.warn("Database disconnected (Demo Mode): Using mock service history.", error)
         return MOCK_SERVICE_RECORDS as any[]
     }
 }
