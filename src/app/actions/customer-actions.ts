@@ -128,3 +128,18 @@ export async function getCustomers() {
     return MOCK_CUSTOMERS as any
   }
 }
+
+export async function getVehicles() {
+  try {
+    const vehicles = await prisma.vehicle.findMany({
+      orderBy: { createdAt: 'desc' },
+      include: {
+        customer: true 
+      }
+    })
+    return { success: true, data: vehicles }
+  } catch (error) {
+     console.warn("Database disconnected (Demo Mode): Using mock vehicles.", error)
+     return { success: true, data: MOCK_VEHICLES }
+  }
+}

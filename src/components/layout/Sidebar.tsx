@@ -4,7 +4,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import Image from "next/image"
 import { cn } from "@/lib/utils"
-import { LayoutGrid, Clock, ClipboardList, Settings2, Wrench, Users2, Box, ScanBarcode, Store, ChartBar, MessageSquare, Shield, ShoppingCart } from "lucide-react"
+import { LayoutGrid, Clock, ClipboardList, Settings2, Wrench, Users2, Box, ScanBarcode, Store, ChartBar, MessageSquare, Shield, ShoppingCart, Calendar } from "lucide-react"
 import { useAuth } from "@/contexts/AuthContext"
 
 const navigation = [
@@ -21,6 +21,7 @@ const navigation = [
   { name: "Feedback", href: "/feedback", icon: MessageSquare, roles: ['ADMIN'] },
   { name: "Vendors", href: "/vendors", icon: Store, roles: ['ADMIN'] },
   { name: "Support", href: "/support", icon: Shield, roles: ['USER'] },
+  { name: "Appointments", href: "/appointments", icon: Calendar, roles: ['ADMIN', 'USER'] },
   { name: "Settings", href: "/settings", icon: Settings2, roles: ['ADMIN', 'USER'] },
 ]
 
