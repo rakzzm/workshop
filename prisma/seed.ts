@@ -197,10 +197,21 @@ async function main() {
     "Good job on the engine work, very professional.",
     "Prompt service and clear communication. Highly recommended.",
     "Decent service, but the turnaround time was a bit longer than expected.",
-    "Very satisfied with the brake repair. Felt safe immediately."
+    "Very satisfied with the brake repair. Felt safe immediately.",
+    "Friendly staff and transparent pricing.",
+    "Fixed the issue I was struggling with for months!",
+    "Quick oil change, in and out in 30 mins.",
+    "Detailed inspection report was very helpful.",
+    "A bit expensive, but quality work."
   ]
 
-  for (let i = 0; i < 5; i++) {
+  const serviceTypes = [
+    'Major Service', 'Minor Service', 'Oil Change', 'Brake Pad Replacement', 
+    'Engine Diagnostics', 'Tire Rotation & Alignment', 'Battery Replacement',
+    'Coolant Flush', 'General Inspection', 'Suspension Repair'
+  ]
+
+  for (let i = 0; i < 10; i++) {
     const vIdx = i % vehicles.length
     
     const exists = await prisma.serviceRecord.findFirst({
@@ -212,44 +223,69 @@ async function main() {
         const sr = await prisma.serviceRecord.create({
           data: {
             vehicleId: vehicles[vIdx].id,
-            date: new Date(Date.now() - (i * 7 * 24 * 60 * 60 * 1000)),
+            date: new Date(Date.now() - (i * 3 * 24 * 60 * 60 * 1000)), // Spread over last month
             status: 'COMPLETED',
-            serviceType: i % 2 === 0 ? 'Major Service' : 'Minor Service',
-            totalCost: 5000 + (i * 1000),
+            serviceType: serviceTypes[i % serviceTypes.length],
+            totalCost: 1500 + (Math.random() * 5000), // Random cost between 1500 and 6500
             mechanicId: mechanics[i % mechanics.length].id,
-            odometer: 15000 + (i * 2000),
-            complaint: 'Regular scheduled maintenance',
+            odometer: 15000 + (i * 2500),
+            complaint: `Customer reported issue with ${serviceTypes[i % serviceTypes.length].toLowerCase().split(' ')[0]} system`,
+            mechanicNotes: `Performed ${serviceTypes[i % serviceTypes.length]}. Check all fluids and safety components.`,
           }
         })
         serviceRecordId = sr.id
 
+        // Add random parts to service record
+        const partIdx = i % parts.length
         await prisma.servicePart.create({
           data: {
             serviceRecordId: sr.id,
-            partId: parts[0].id,
-            quantity: 1,
-            unitPrice: parts[0].price,
-            costAtTime: parts[0].price,
+            partId: parts[partIdx].id,
+            quantity: 1 + Math.floor(Math.random() * 2),
+            itemType: "PART",
+            description: parts[partIdx].name,
+            unitPrice: parts[partIdx].price,
+            costAtTime: parts[partIdx].price,
+            taxRate: 18,
+            taxAmount: (parts[partIdx].price * 0.18),
+            discount: 0
           }
         })
+        
+        // Add Labor charge as a service part item
+        await prisma.servicePart.create({
+          data: {
+             serviceRecordId: sr.id,
+             itemType: "LABOR",
+             description: "Standard Labor Charges",
+             unitPrice: 500 + (i * 50),
+             quantity: 1,
+             taxRate: 18,
+             taxAmount: ((500 + (i * 50)) * 0.18),
+             costAtTime: 500 + (i * 50)
+          }
+        })
+
     } else {
         serviceRecordId = exists.id
     }
 
-    // Create Feedback for each ServiceRecord
-    await prisma.feedback.upsert({
-        where: { serviceRecordId: serviceRecordId },
-        update: {},
-        create: {
-            serviceRecordId: serviceRecordId,
-            rating: 4 + (i % 2), // 4 or 5 stars
-            comment: feedbackComments[i % feedbackComments.length],
-            tags: JSON.stringify(['Quality', 'Timing', 'Value'].slice(0, 1 + (i % 3))),
-            createdAt: new Date(Date.now() - (i * 6 * 24 * 60 * 60 * 1000))
-        }
-    })
+    // Create Feedback for most records
+    if (i < 8) { // 80% have feedback
+        await prisma.feedback.upsert({
+            where: { serviceRecordId: serviceRecordId },
+            update: {},
+            create: {
+                serviceRecordId: serviceRecordId,
+                rating: 3 + Math.floor(Math.random() * 3), // 3 to 5 stars
+                comment: feedbackComments[i % feedbackComments.length],
+                tags: JSON.stringify(['Quality', 'Timing', 'Value'].slice(0, 1 + (i % 3))),
+                createdAt: new Date(Date.now() - (i * 2 * 24 * 60 * 60 * 1000))
+            }
+        })
+    }
   }
-  console.log('Created 5 Service records with Feedback')
+  console.log('Created 10 Detailed Service records with Parts and Feedback')
   console.log('Created 5 Service records')
 
   // 10. Create Support Tickets (Feedback Menu)
