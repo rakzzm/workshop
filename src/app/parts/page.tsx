@@ -24,7 +24,7 @@ export default async function PartsPage(props: { searchParams: Promise<{ q?: str
       orderBy: { name: 'asc' }
     })
   } catch (error) {
-    console.error('Database error, using mock data:', error)
+    console.warn("Database disconnected (Demo Mode): Using mock parts.", error)
     // Filter mock data by query if present
     parts = MOCK_PARTS.filter(part => {
       if (!query) return true

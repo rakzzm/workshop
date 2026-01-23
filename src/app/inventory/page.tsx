@@ -27,7 +27,7 @@ export default async function InventoryPage(props: { searchParams: Promise<{ q?:
       orderBy: { stock: 'asc' } // Low stock first
     })
   } catch (error) {
-    console.log('Database unavailable, using mock parts')
+    console.warn("Database disconnected (Demo Mode): Using mock parts.", error)
     parts = MOCK_PARTS
   }
 

@@ -14,7 +14,7 @@ export default async function PurchaseOrdersPage() {
   try {
     orders = await prisma.purchaseOrder.findMany()
   } catch (error) {
-    console.error('Database error for orders, using mock data:', error)
+    console.warn("Database disconnected (Demo Mode): Using mock orders.", error)
     orders = MOCK_PURCHASE_ORDERS as any[]
   }
 
@@ -23,7 +23,7 @@ export default async function PurchaseOrdersPage() {
       select: { id: true, name: true, sku: true }
     })
   } catch (error) {
-    console.error('Database error for parts, using mock data:', error)
+    console.warn("Database disconnected (Demo Mode): Using mock parts.", error)
     parts = MOCK_PARTS.map(p => ({ id: p.id, name: p.name, sku: p.sku })) as any[]
   }
 
