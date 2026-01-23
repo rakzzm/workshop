@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
 import { MOCK_TICKETS } from "@/lib/mock-data"
 
-export async function createTicket(data: any) {
+export async function createTicket(data: any): Promise<{ success: boolean; error?: string }> {
     const { subject, description, priority, category, customerId, vehicleId } = data
     
     // SLA Calculation

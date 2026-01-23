@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
 import { MOCK_CUSTOMERS, MOCK_VEHICLES, MOCK_SERVICE_RECORDS } from "@/lib/mock-data"
 
-export async function createCustomer(data: any) {
+export async function createCustomer(data: any): Promise<{ success: boolean; error?: string; customer?: any }> {
   try {
     const result = await prisma.$transaction(async (tx) => {
       // 1. Create the customer
@@ -61,7 +61,7 @@ export async function createCustomer(data: any) {
   }
 }
 
-export async function updateCustomer(id: number, data: any) {
+export async function updateCustomer(id: number, data: any): Promise<{ success: boolean; error?: string; customer?: any }> {
   try {
     const customer = await prisma.customer.update({
       where: { id },
@@ -82,7 +82,7 @@ export async function updateCustomer(id: number, data: any) {
   }
 }
 
-export async function deleteCustomer(id: number) {
+export async function deleteCustomer(id: number): Promise<{ success: boolean; error?: string }> {
   try {
     // Check if customer has vehicles
     const vehicleCount = await prisma.vehicle.count({

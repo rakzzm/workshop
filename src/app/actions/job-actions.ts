@@ -35,7 +35,7 @@ export async function getJobs() {
 }
 
 // Create new job
-export async function createJob(data: any) {
+export async function createJob(data: any): Promise<{ success: boolean; error?: string; job?: any }> {
   try {
     const job = await prisma.jobBoard.create({
       data: {
@@ -58,7 +58,7 @@ export async function createJob(data: any) {
 }
 
 // Approve job
-export async function approveJob(id: number | string, data: any) {
+export async function approveJob(id: number | string, data: any): Promise<{ success: boolean; error?: string; job?: any }> {
   try {
     const numericId = parseId(id)
     if (numericId === -1) throw new Error("Invalid ID")
@@ -83,7 +83,7 @@ export async function approveJob(id: number | string, data: any) {
 }
 
 // Reject job
-export async function rejectJob(id: number | string, data: any) {
+export async function rejectJob(id: number | string, data: any): Promise<{ success: boolean; error?: string; job?: any }> {
   try {
     const numericId = parseId(id)
     if (numericId === -1) throw new Error("Invalid ID")
@@ -106,7 +106,7 @@ export async function rejectJob(id: number | string, data: any) {
 }
 
 // Start job (move to IN_PROGRESS)
-export async function startJob(id: number | string) {
+export async function startJob(id: number | string): Promise<{ success: boolean; error?: string; job?: any }> {
   try {
     const numericId = parseId(id)
     if (numericId === -1) throw new Error("Invalid ID")
@@ -127,7 +127,7 @@ export async function startJob(id: number | string) {
 }
 
 // Complete job
-export async function completeJob(id: number | string, data: any) {
+export async function completeJob(id: number | string, data: any): Promise<{ success: boolean; error?: string; job?: any }> {
   try {
     const numericId = parseId(id)
     if (numericId === -1) throw new Error("Invalid ID")
@@ -175,7 +175,7 @@ export async function completeJob(id: number | string, data: any) {
 }
 
 // Delete job
-export async function deleteJob(id: number | string) {
+export async function deleteJob(id: number | string): Promise<{ success: boolean; error?: string }> {
   try {
     const numericId = parseId(id)
     if (numericId === -1) throw new Error("Invalid ID")

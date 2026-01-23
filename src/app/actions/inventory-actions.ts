@@ -40,7 +40,7 @@ export async function createPart(data: any) {
   }
 }
 
-export async function updatePart(id: number, data: any) {
+export async function updatePart(id: number, data: any): Promise<{ success: boolean; error?: string }> {
     try {
         await prisma.part.update({
             where: { id },
@@ -63,7 +63,7 @@ export async function updatePart(id: number, data: any) {
     }
 }
 
-export async function deletePart(id: number) {
+export async function deletePart(id: number): Promise<{ success: boolean; error?: string }> {
     try {
         await prisma.part.delete({
             where: { id }

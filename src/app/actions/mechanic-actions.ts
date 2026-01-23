@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
 import { MOCK_MECHANICS } from "@/lib/mock-data"
 
-export async function createMechanic(data: any) {
+export async function createMechanic(data: any): Promise<{ success: boolean; error?: string; mechanic?: any }> {
   try {
     const mechanic = await prisma.mechanic.create({
       data: {
@@ -33,7 +33,7 @@ export async function createMechanic(data: any) {
   }
 }
 
-export async function updateMechanic(id: number, data: any) {
+export async function updateMechanic(id: number, data: any): Promise<{ success: boolean; error?: string; mechanic?: any }> {
   try {
     const mechanic = await prisma.mechanic.update({
       where: { id },
@@ -61,7 +61,7 @@ export async function updateMechanic(id: number, data: any) {
   }
 }
 
-export async function deleteMechanic(id: number) {
+export async function deleteMechanic(id: number): Promise<{ success: boolean; error?: string }> {
   try {
     await prisma.mechanic.delete({
       where: { id }

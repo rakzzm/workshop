@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
 import { MOCK_VENDORS } from "@/lib/mock-data"
 
-export async function createVendor(data: any) {
+export async function createVendor(data: any): Promise<{ success: boolean; error?: string; vendor?: any }> {
   try {
     const vendor = await prisma.vendor.create({
       data: {
@@ -36,7 +36,7 @@ export async function createVendor(data: any) {
   }
 }
 
-export async function updateVendor(id: number, data: any) {
+export async function updateVendor(id: number, data: any): Promise<{ success: boolean; error?: string; vendor?: any }> {
   try {
     const vendor = await prisma.vendor.update({
       where: { id },
@@ -67,7 +67,7 @@ export async function updateVendor(id: number, data: any) {
   }
 }
 
-export async function deleteVendor(id: number) {
+export async function deleteVendor(id: number): Promise<{ success: boolean; error?: string }> {
   try {
     // Check if vendor has purchase orders
     const poCount = await prisma.purchaseOrder.count({
