@@ -9,7 +9,7 @@ services:
     ports:
       - "3434:3000"
     volumes:
-      - ./prisma/dev.db:/app/dev.db
+      - ./prisma:/app/prisma
     environment:
-      - DATABASE_URL=file:./dev.db
+      - DATABASE_URL=file:/app/prisma/dev.db
     restart: always
